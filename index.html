@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ev Alma Hesaplama</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .page-description {
+            text-align: center;
+            padding: 20px 0 30px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .description-text {
+            font-size: 1.2rem;
+            color: #333333;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .calculator {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f8f8;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f8f8;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #000000;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #cccccc;
+            border-radius: 8px;
+            background-color: white;
+            color: #000000;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #666666;
+            outline: none;
+        }
+        
+        .note {
+            font-size: 0.9rem;
+            color: #666666;
+            margin-top: 8px;
+            display: block;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        
+        button {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #333333;
+        }
+        
+        .result-box {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #000000;
+            font-weight: 600;
+        }
+        
+        .result-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 20px 0;
+            color: #000000;
+            line-height: 1.2;
+        }
+        
+        .result-details {
+            font-size: 1.3rem;
+            margin: 15px 0;
+            color: #333333;
+        }
+        
+        .result-extra {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            color: #555555;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .result-value {
+                font-size: 2.5rem;
+            }
+            
+            .input-section, .result-section {
+                padding: 20px;
+            }
+            
+            .description-text {
+                font-size: 1rem;
+            }
+            
+            label, input {
+                font-size: 1rem;
+            }
+            
+            button {
+                padding: 14px 20px;
+                font-size: 1.1rem;
+            }
+            
+            .result-title {
+                font-size: 1.3rem;
+            }
+            
+            .result-details {
+                font-size: 1.1rem;
+            }
+            
+            .result-extra {
+                font-size: 1rem;
+            }
+        }
+        
+        .currency {
+            position: relative;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            color: #000000;
+        }
+        
+        .currency input {
+            padding-left: 40px;
+        }
+        
+        .icon {
+            margin-right: 10px;
+            color: #000000;
+        }
+        
+        .example-prices {
+            margin-top: 20px;
+        }
+        
+        .example-prices p {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .example-btn {
+            width: auto;
+            padding: 10px 15px;
+            margin-right: 8px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            display: inline-block;
+            background-color: #333333;
+        }
+        
+        .example-btn:hover {
+            background-color: #555555;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .example-btn {
+                width: calc(50% - 10px);
+                margin-right: 5px;
+                font-size: 0.8rem;
+                padding: 8px 10px;
+            }
+            
+            .example-prices p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-description">
+            <p class="description-text">
+                <i class="fas fa-calculator icon"></i>Ev fiyatını ve aylık gelirinizi girerek evi almak için kaç yıl çalışmanız gerektiğini hesaplayın. Varsayılan olarak asgari ücret (28.075,50 ₺) kullanılır.
+            </p>
+        </div>
+        
+        <main>
+            <div class="calculator">
+                <div class="input-section">
+                    <div class="input-group">
+                        <label for="housePrice"><i class="fas fa-tag icon"></i>Ev Fiyatı (₺)</label>
+                        <div class="currency">
+                            <span class="currency-symbol">₺</span>
+                            <input type="text" id="housePrice" placeholder="Örnek: 2.500.000">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="salary"><i class="fas fa-money-bill-wave icon"></i>Aylık Geliriniz veya ev almak için aylık ne kadar ayırabileceğiniz (₺)</label>
+                        <div class="currency">
+                            <span class="currency-symbol">₺</span>
+                            <input type="text" id="salary" placeholder="28.075,50" value="28.075,50">
+                        </div>
+                        <span class="note">Aylık gelirinizi girdiğinizde, ev almak için her ay tam maaşınız kadar para biriktirebileceğiniz varsayılır ve hesaplama buna göre yapılır. İsterseniz bunun yerine ev için her ay toplam ayırabileceğiniz miktarı da yazabilirsiniz.</span>
+                    </div>
+                    
+                    <button id="calculateBtn"><i class="fas fa-calculator icon"></i>HESAPLA</button>
+                    
+                    <div class="example-prices">
+                        <p><i class="fas fa-bolt icon"></i>Hızlı Örnek Ev Fiyatları:</p>
+                        <button class="example-btn" data-price="2000000">2.000.000 ₺</button>
+                        <button class="example-btn" data-price="2500000">2.500.000 ₺</button>
+                        <button class="example-btn" data-price="3000000">3.000.000 ₺</button>
+                        <button class="example-btn" data-price="3500000">3.500.000 ₺</button>
+                        <button class="example-btn" data-price="4000000">4.000.000 ₺</button>
+                        <button class="example-btn" data-price="4500000">4.500.000 ₺</button>
+                        <button class="example-btn" data-price="5000000">5.000.000 ₺</button>
+                        <button class="example-btn" data-price="10000000">10.000.000 ₺</button>
+                        <button class="example-btn" data-price="20000000">20.000.000 ₺</button>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-box">
+                        <div class="result-title">Evi Almak İçin Çalışmanız Gereken Süre:</div>
+                        <div class="result-value" id="resultYears">-- YIL</div>
+                        <div class="result-details" id="resultMonths">-- Ay</div>
+                        <div class="result-extra" id="resultDays">-- Gün</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <!-- Footer içeriği boş bırakıldı -->
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateBtn = document.getElementById('calculateBtn');
+            const housePriceInput = document.getElementById('housePrice');
+            const salaryInput = document.getElementById('salary');
+            const exampleButtons = document.querySelectorAll('.example-btn');
+            
+            const resultYears = document.getElementById('resultYears');
+            const resultMonths = document.getElementById('resultMonths');
+            const resultDays = document.getElementById('resultDays');
+            
+            // Formatlama fonksiyonu: sayıyı binlik basamaklara ayırır
+            function formatNumber(num) {
+                if (!num) return '';
+                
+                // Nokta ve virgülleri temizle
+                let cleaned = num.toString().replace(/\./g, '').replace(',', '.');
+                
+                // Sayıya çevir
+                let number = parseFloat(cleaned);
+                
+                if (isNaN(number)) return '';
+                
+                // Türkçe format: binlik ayırıcı nokta, ondalık ayırıcı virgül
+                return number.toLocaleString('tr-TR', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                });
+            }
+            
+            // Sayıyı parse etmek için: formatlı string'i sayıya çevir
+            function parseFormattedNumber(formatted) {
+                if (!formatted) return 0;
+                
+                // Noktaları (binlik ayırıcı) kaldır, virgülü noktaya çevir
+                let cleaned = formatted.toString()
+                    .replace(/\./g, '')
+                    .replace(',', '.');
+                
+                let number = parseFloat(cleaned);
+                
+                return isNaN(number) ? 0 : number;
+            }
+            
+            // Input alanlarına formatlama uygula
+            housePriceInput.addEventListener('input', function() {
+                // Kullanıcının girdiği değeri al
+                let value = this.value.replace(/[^0-9,]/g, '');
+                
+                // Sadece bir tane ondalık ayırıcı olabilir
+                let parts = value.split(',');
+                if (parts.length > 2) {
+                    value = parts[0] + ',' + parts.slice(1).join('');
+                }
+                
+                // Binlik ayırıcıları ekle
+                if (value.length > 0) {
+                    let numberPart = value.split(',')[0];
+                    let decimalPart = value.includes(',') ? ',' + value.split(',')[1] : '';
+                    
+                    // Binlik ayırıcıları ekle
+                    let formattedNumber = numberPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    
+                    this.value = formattedNumber + decimalPart;
+                } else {
+                    this.value = '';
+                }
+            });
+            
+            salaryInput.addEventListener('input', function() {
+                // Kullanıcının girdiği değeri al
+                let value = this.value.replace(/[^0-9,]/g, '');
+                
+                // Sadece bir tane ondalık ayırıcı olabilir
+                let parts = value.split(',');
+                if (parts.length > 2) {
+                    value = parts[0] + ',' + parts.slice(1).join('');
+                }
+                
+                // Binlik ayırıcıları ekle
+                if (value.length > 0) {
+                    let numberPart = value.split(',')[0];
+                    let decimalPart = value.includes(',') ? ',' + value.split(',')[1] : '';
+                    
+                    // Binlik ayırıcıları ekle
+                    let formattedNumber = numberPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    
+                    this.value = formattedNumber + decimalPart;
+                } else {
+                    this.value = '';
+                }
+            });
+            
+            calculateBtn.addEventListener('click', calculateTime);
+            
+            // Örnek fiyat butonlarına tıklama olayını ekle
+            exampleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const price = this.getAttribute('data-price');
+                    housePriceInput.value = formatNumber(price);
+                    calculateTime();
+                });
+            });
+            
+            function calculateTime() {
+                const housePrice = parseFormattedNumber(housePriceInput.value);
+                const salary = parseFormattedNumber(salaryInput.value) || 28075.50; // Varsayılan asgari ücret
+                
+                // Geçerli değerleri kontrol et
+                if (!housePrice || housePrice <= 0) {
+                    alert("Lütfen geçerli bir ev fiyatı giriniz.");
+                    housePriceInput.focus();
+                    return;
+                }
+                
+                if (!salary || salary <= 0) {
+                    alert("Lütfen geçerli bir maaş giriniz.");
+                    salaryInput.focus();
+                    return;
+                }
+                
+                // Matematiksel hesaplama - KESİNLİKLE YUVARLAMA YAPMADAN
+                // Aylık gelir
+                const monthlyIncome = salary;
+                
+                // Toplam ay sayısı (ondalıklı)
+                const totalMonthsDecimal = housePrice / monthlyIncome;
+                
+                // Tam yıl sayısı (aşağı yuvarlama)
+                const fullYears = Math.floor(totalMonthsDecimal / 12);
+                
+                // Kalan ay (ondalıklı)
+                const remainingMonthsDecimal = totalMonthsDecimal - (fullYears * 12);
+                
+                // Tam ay sayısı (aşağı yuvarlama - yuvarlama YOK)
+                const fullMonths = Math.floor(remainingMonthsDecimal);
+                
+                // Kalan günler (bir ay = 30 gün kabul ediyoruz)
+                // Küsüratlı kısmı alıp güne çeviriyoruz
+                const remainingDaysDecimal = (remainingMonthsDecimal - fullMonths) * 30;
+                
+                // Gün sayısını tam sayı olarak alıyoruz (aşağı yuvarlama)
+                const fullDays = Math.floor(remainingDaysDecimal);
+                
+                // Sonuçları göster
+                if (totalMonthsDecimal / 12 > 100) {
+                    resultYears.textContent = "100+ YIL";
+                    resultMonths.textContent = "1200+ Ay";
+                    resultDays.textContent = "0 Gün";
+                } else {
+                    resultYears.textContent = `${fullYears} YIL`;
+                    
+                    // Ay ve günü göster
+                    if (fullMonths > 0 || fullDays > 0) {
+                        resultMonths.textContent = `${fullMonths} Ay`;
+                        resultDays.textContent = `${fullDays} Gün`;
+                    } else {
+                        resultMonths.textContent = "0 Ay";
+                        resultDays.textContent = "0 Gün";
+                    }
+                    
+                    // Eğer tam yıl varsa ama ay ve gün yoksa
+                    if (fullYears > 0 && fullMonths === 0 && fullDays === 0) {
+                        resultMonths.textContent = "0 Ay";
+                        resultDays.textContent = "0 Gün";
+                    }
+                }
+            }
+            
+            // Sayfa yüklendiğinde otomatik hesaplama yapma
+            // Sadece boş değerleri göster
+            resultYears.textContent = "-- YIL";
+            resultMonths.textContent = "-- Ay";
+            resultDays.textContent = "-- Gün";
+        });
+    </script>
+</body>
+</html>
